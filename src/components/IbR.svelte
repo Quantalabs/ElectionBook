@@ -32,8 +32,18 @@
 
 		states = topojson.feature(us, us.objects.states).features;
 
-		trumpData = await fetch('/api/IbR?keyword=trump&geo=US&time=30').then((d) => d.json());
-		bidenData = await fetch('/api/IbR?keyword=biden&geo=US&time=30').then((d) => d.json());
+		let cachedData = localStorage.getItem('IbR');
+
+		// Check if data is less than a day old
+		if (cachedData && Date.now() - Number(cachedData.timestamp) < 1000 * 60 * 60 * 24) {
+			trumpData = JSON.parse(cachedData).trump;
+			bidenData = JSON.parse(cachedData).biden;
+		} else {
+			trumpData = await fetch('/api/IbR?keyword=trump&geo=US&time=30').then((d) => d.json());
+			bidenData = await fetch('/api/IbR?keyword=biden&geo=US&time=30').then((d) => d.json());
+
+			localStorage.setItem('IbR', JSON.stringify({ trump: trumpData, biden: bidenData, timestamp: Date.now() }));
+		}
 
 		for (const state of states) {
 			const name = state.properties.name;
