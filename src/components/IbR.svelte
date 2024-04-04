@@ -17,12 +17,56 @@
 
 	const path = geoPath().projection(null);
 
-	let states = [];
-	let selected;
-	let tabbed;
+	let states: {
+		type: 'Feature';
+		id: string;
+		properties: {
+			name: string;
+		};
+		geometry: {
+			type: 'Polygon';
+			coordinates: number[][];
+		};
+	}[] = [];
+	let selected: {
+		type: 'Feature';
+		id: string;
+		properties: {
+			name: string;
+		};
+		geometry: {
+			type: 'Polygon';
+			coordinates: number[][];
+		};
+	};
+	let tabbed: {
+		type: 'Feature';
+		id: string;
+		properties: {
+			name: string;
+		};
+		geometry: {
+			type: 'Polygon';
+			coordinates: number[][];
+		};
+	};
 
-	let trumpData;
-	let bidenData;
+	let trumpData: {
+		geoCode: string;
+		geoName: string;
+		value: [number];
+		formattedValue: [string];
+		maxValueIndex: number;
+		hasData: [boolean];
+	}[];
+	let bidenData: {
+		geoCode: string;
+		geoName: string;
+		value: [number];
+		formattedValue: [string];
+		maxValueIndex: number;
+		hasData: [boolean];
+	}[];
 	let overlay: {
 		[key: string]: [string, number, [number, number]];
 	} = {};
@@ -68,7 +112,7 @@
 			}
 
 			let sum = values[0] + values[1];
-			color = generateColorHex(...values);
+			color = generateColorHex(values[0], values[1]);
 			overlay[name] = [color, Math.max(...values), [values[0] / sum, values[1] / sum]];
 		}
 	});

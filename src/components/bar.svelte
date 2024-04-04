@@ -7,6 +7,10 @@
 	function bar(data: number[]) {
 		let bar = document.getElementById('bar');
 
+		if (!bar) {
+			return;
+		}
+
 		for (let i = 0; i < data.length; i++) {
 			let newElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 			if (i === 0) {
