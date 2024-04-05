@@ -157,7 +157,7 @@
 		{selected.properties.name}
 		<br />
 		<br />
-		<Bar data={overlay[selected.properties.name][2]} colors={['#FF0000', '#0000FF']} />
+		<Bar data={overlay[selected.properties.name][2]} colors={['#ff7676', '#7676ff']} />
 		{Math.round(overlay[selected.properties.name][2][0] * 100)} : {Math.round(
 			overlay[selected.properties.name][2][1] * 100
 		)}
