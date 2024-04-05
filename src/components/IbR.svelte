@@ -5,15 +5,14 @@
 	import { draw } from 'svelte/transition';
 	import Bar from './bar.svelte';
 
-	const generateColorHex = (x: number, y: number) => {
-		const delta = Math.abs(x - y);
-		const maxVal = Math.max(x, y);
-		const deltaNorm = delta / maxVal;
-		const red = x > y ? 255 : Math.round(255 * (1 - deltaNorm));
-		const green = x > y ? Math.round(255 * (1 - deltaNorm)) : Math.round(255 * (1 - deltaNorm));
-		const blue = x > y ? Math.round(255 * (1 - deltaNorm)) : 255;
-		return '#' + ((1 << 24) + (red << 16) + (green << 8) + blue).toString(16).slice(1);
-	};
+	function generateHSL(x: number, y: number) {
+		// Calculate hue based on the comparison of inputs
+		let hue = x > y ? 0 : 240; // Red or blue
+
+		let lightness = 100 - Math.abs(x - y);
+
+		return `hsl(${hue}, 65%, ${lightness}%)`;
+	}
 
 	const path = geoPath().projection(null);
 
@@ -117,7 +116,7 @@
 			}
 
 			let sum = values[0] + values[1];
-			color = generateColorHex(values[0], values[1]);
+			color = generateHSL(values[0], values[1]);
 			overlay[name] = [color, Math.max(...values), [values[0] / sum, values[1] / sum]];
 		}
 	});
