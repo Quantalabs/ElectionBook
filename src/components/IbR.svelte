@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import * as topojson from 'topojson-client';
 	import { geoPath } from 'd3-geo';
+	import * as d3 from 'd3';
 	import { draw } from 'svelte/transition';
 	import Bar from './bar.svelte';
 
@@ -119,6 +120,17 @@
 			color = generateHSL(values[0], values[1]);
 			overlay[name] = [color, Math.max(...values), [values[0] / sum, values[1] / sum]];
 		}
+
+		function handleZoom(e) {
+			d3.select('svg g').attr('transform', e.transform);
+		}
+
+		let zoom = d3.zoom()
+			.scaleExtent([1, 5])
+			.translateExtent([[0, 0], [975, 610]])
+			.on('zoom', handleZoom);
+
+		d3.select('svg').call(zoom);
 	});
 </script>
 
