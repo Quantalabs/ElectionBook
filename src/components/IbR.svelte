@@ -72,7 +72,12 @@
 	} = {};
 
 	onMount(async () => {
-		const us = await fetch('/topojson/states-albers-10m.json').then((d) => d.json());
+		let us = JSON.parse(localStorage.getItem('statesTopoJSON') || '{}');
+
+		if (Object.keys(us).length === 0) {
+			us = await fetch('/topojson/states-albers-10m.json').then((d) => d.json());
+			localStorage.setItem('statesTopoJSON', JSON.stringify(us));
+		}
 
 		states = topojson.feature(us, us.objects.states).features;
 
@@ -128,7 +133,7 @@
 				d={path(feature)}
 				on:click={() => (selected = feature)}
 				class="state"
-				in:draw={{ delay: i * 50, duration: 1000 }}
+				in:draw={{ delay: i * 10, duration: 1000 }}
 				fill={overlay[feature.properties.name] ? overlay[feature.properties.name][0] : 'white'}
 				role="button"
 				tabindex="0"
