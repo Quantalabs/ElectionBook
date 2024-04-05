@@ -30,7 +30,11 @@
 		}
 	}
 
-	onMount(() => bar(data));
+	$: if (document.getElementById('bar')) {
+		bar(data);
+	} else {
+		onMount(() => bar(data));
+	}
 </script>
 
 <svg viewBox="0 0 50 2" style="font-size: {2 / 3};" id="bar"> </svg>
