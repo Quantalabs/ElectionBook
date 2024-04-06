@@ -157,11 +157,10 @@
 				}}
 			/>
 		{/each}
+		{#if selected}
+			<path d={path(selected)} fill="hsl(0 0% 50% / 20%)" stroke="black" stroke-width={2} />
+		{/if}
 	</g>
-
-	{#if selected}
-		<path d={path(selected)} fill="hsl(0 0% 50% / 20%)" stroke="black" stroke-width={2} />
-	{/if}
 </svg>
 <div class="selectedName">
 	{#if selected}
