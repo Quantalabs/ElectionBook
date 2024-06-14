@@ -125,18 +125,20 @@
 			d3.select('svg g').attr('transform', e.transform);
 		}
 
-		let zoom = d3.zoom()
+		let zoom = d3
+			.zoom()
 			.scaleExtent([1, 5])
-			.translateExtent([[0, 0], [975, 610]])
+			.translateExtent([
+				[0, 0],
+				[975, 610]
+			])
 			.on('zoom', handleZoom);
 
-		d3.select('svg').call(zoom);
+		d3.select('#IbR').call(zoom);
 	});
 </script>
 
-<h5 style="text-align: center;">Trump vs. Biden</h5>
-<p style="text-align: center;">As per google search trends over the past 30 days</p>
-<svg viewBox="0 0 975 610">
+<svg viewBox="0 0 975 610" id="IbR">
 	<!-- State shapes -->
 	<g fill="white" stroke="black">
 		{#each states as feature, i}
