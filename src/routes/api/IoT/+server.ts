@@ -6,7 +6,7 @@ export const GET = async ({ url }) => {
 		const geo: string = url.searchParams.get('geo') || '';
 		const time: number = Number(url.searchParams.get('time')) || 7;
 
-		const date = new Date(Date.now());
+		const date = new Date(Number(url.searchParams.get('endTime')) || new Date(Date.now()));
 		date.setDate(date.getDate() - time);
 
 		const trends = await googleTrends.interestOverTime({

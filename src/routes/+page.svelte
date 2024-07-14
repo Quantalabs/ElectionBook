@@ -2,12 +2,18 @@
 	import { onMount } from 'svelte';
 	import IbR from '../components/IbR.svelte';
 	import IoT from '../components/IoT.svelte';
+	import News from '../components/news.svelte';
 
 	let showIoT = true; // Show IoT component by default
 	let isPortrait = false;
+	let show2020 = false;
 
 	function toggleComponent() {
 		showIoT = !showIoT;
+	}
+
+	function show2020Map() {
+		show2020 = !show2020;
 	}
 
 	onMount(() => {
@@ -28,8 +34,8 @@
 	<div class="landscape-message">Please view website in landscape</div>
 {:else}
 	<div>
-		<h1>ElectionBook</h1>
-		<p>Using social media to look at political trends across the nation.</p>
+		<h1><span id="election">Election</span><span id="book">Book</span></h1>
+		<p>Using the internet to look at political trends across the nation.</p>
 
 		<h5 style="text-align: center;">Trump vs. Biden</h5>
 		<p style="text-align: center;">As per google search trends over the past 30 days</p>
@@ -50,10 +56,24 @@
 					<IoT />
 				</div>
 			{:else}
-				<div class="item" id="IbR-holder">
-					<IbR />
-				</div>
+				{#if show2020}
+					<button class="toggle-button" on:click={show2020Map}>Compare with Current Data</button>
+					<div class="item" id="IbR-holder">
+						<IbR start={new Date(Date.now() - 4 * 365 * 24 * 60 * 60 * 1000).getTime()} />
+					</div>
+				{:else}
+					<button class="toggle-button" on:click={show2020Map}>Compare with 2020 Data</button>
+					<div class="item" id="IbR-holder">
+						<IbR />
+					</div>
+				{/if}
 			{/if}
+		</div>
+
+		<div class="container">
+			<div class="item" id="news-holder">
+				<News />
+			</div>
 		</div>
 	</div>
 {/if}
@@ -108,5 +128,12 @@
 		color: #c9c9c9;
 		text-align: center;
 		background-color: #222222;
+	}
+
+	#election {
+		color: rgb(255, 118, 118);
+	}
+	#book {
+		color: rgb(118, 118, 255);
 	}
 </style>

@@ -11,9 +11,9 @@
 		time: Date;
 		value: number;
 	}[][] = [];
-	let candidates = ['Biden', 'Trump']; // Replace with actual candidate names
-	let geo = 'US'; // or any other geo location
-	let time = 30; // Last 30 days
+	let candidates = ['Joe Biden', 'Donald Trump'];
+	let geo = 'US'; 
+	let time = 30; 
 
 	async function fetchData() {
 		const params = new URLSearchParams();
@@ -110,7 +110,7 @@
 				.append('path')
 				.datum(data[index])
 				.attr('fill', 'none')
-				.attr('stroke', index === 0 ? 'blue' : 'red')
+				.attr('stroke', index === 0 ? 'rgb(118, 118, 255)' : 'rgb(255, 118, 118)')
 				.attr('stroke-width', 1.5)
 				.attr('d', lineGen);
 
@@ -133,14 +133,14 @@
 				.data(data[index])
 				.enter()
 				.append('circle')
-				.attr('r', 4)
+				.attr('r', 6)
 				.attr('cx', (d) => x(d.time))
 				.attr('cy', (d) => y(d.value))
-				.attr('fill', index === 0 ? 'blue' : 'red')
+				.attr('fill', index === 0 ? 'rgb(118, 118, 255)' : 'rgb(255, 118, 118)')
 				.attr('opacity', 0)
 				.attr('opacity', 1)
 				.on('mouseover', function (_, d) {
-					select('#tooltip').style('display', 'block').text(`Value: ${d.value}`);
+					select('#tooltip').style('display', 'block').text(`Value: ${d.value}. \n Time: ${new Date(d.time).toDateString()}`);
 				})
 				.on('mouseout', function () {
 					select('#tooltip').style('display', 'none');

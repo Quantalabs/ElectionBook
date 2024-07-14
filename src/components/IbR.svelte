@@ -6,13 +6,18 @@
 	import { draw } from 'svelte/transition';
 	import Bar from './bar.svelte';
 
-	function generateHSL(x: number, y: number) {
-		// Calculate hue based on the comparison of inputs
-		let hue = x > y ? 0 : 240; // Red or blue
-
-		let lightness = 100 - Math.abs(x - y);
-
-		return `hsl(${hue}, 65%, ${lightness}%)`;
+	function generateColor(redScore: number, blueScore: number) {
+		if (redScore > blueScore && redScore - blueScore > 10) {
+			return 'rgb(255, 118, 118)';
+		} else if (blueScore > redScore && blueScore - redScore > 10) {
+			return 'rgb(118, 118, 255)';
+		} else if (redScore > blueScore) {
+			return 'rgb(198, 118, 175)';
+		} else if (blueScore > redScore) {
+			return 'rgb(130, 118, 244)';
+		} else {
+			return 'rgb(70, 35, 209)';
+		}
 	}
 
 	const path = geoPath().projection(null);
@@ -71,6 +76,14 @@
 		[key: string]: [string, number, [number, number]];
 	} = {};
 
+	let today = new Date();
+	export let start = new Date(today.setDate(today.getDate() - 30)).getTime();
+	let startTime = new Date(start);
+	let shouldBeStart = new Date(new Date().setDate(today.getDate() - 30));
+	startTime.setHours(0, 0, 0, 0);
+	shouldBeStart.setHours(0, 0, 0, 0);
+	let endTime = new Date(new Date(startTime).getTime() + 30 * 24 * 60 * 60 * 1000).getTime();
+
 	onMount(async () => {
 		let us = JSON.parse(localStorage.getItem('statesTopoJSON') || '{}');
 
@@ -81,19 +94,22 @@
 
 		states = topojson.feature(us, us.objects.states).features;
 
-		let cachedData = JSON.parse(localStorage.getItem('IbR') || '{}');
+		let value = startTime.getTime() == shouldBeStart.getTime() ? 'IbR' : 'IbR-2020';
+
+		let cachedData = JSON.parse(localStorage.getItem(value) || '{}');
+		let query = '&geo=US&time=30&endTime=' + endTime;
 
 		// Check if data is less than a day old
 		if (cachedData && Date.now() - Number(cachedData.timestamp) < 1000 * 60 * 60 * 24) {
 			trumpData = cachedData.trump;
 			bidenData = cachedData.biden;
 		} else {
-			trumpData = await fetch('/api/IbR?keyword=trump&geo=US&time=30').then((d) => d.json());
-			bidenData = await fetch('/api/IbR?keyword=biden&geo=US&time=30').then((d) => d.json());
+			trumpData = await fetch('/api/IbR?keyword=Trump' + query).then((d) => d.json());
+			bidenData = await fetch('/api/IbR?keyword=Biden' + query).then((d) => d.json());
 
 			localStorage.setItem(
-				'IbR',
-				JSON.stringify({ trump: trumpData, biden: bidenData, timestamp: Date.now() })
+				value,
+				JSON.stringify({ trump: trumpData, biden: bidenData, timestamp: Date.now(), query })
 			);
 
 			console.log('Reset cached data.');
@@ -117,7 +133,7 @@
 			}
 
 			let sum = values[0] + values[1];
-			color = generateHSL(values[0], values[1]);
+			color = generateColor(values[0], values[1]);
 			overlay[name] = [color, Math.max(...values), [values[0] / sum, values[1] / sum]];
 		}
 
