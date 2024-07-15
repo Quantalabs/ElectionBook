@@ -19,7 +19,9 @@ jobs:
         node-version: 20
         cache: 'yarn'
     - name: Update files
-      run: node scripts/fetchNews.js ${{ secrets.NEWS_TOKEN }}
+      run: |
+        yarn install
+        node scripts/fetchNews.js ${{ secrets.NEWS_TOKEN }}
     - name: Commit report
       run: |
         git config user.name "github-actions[bot]"
