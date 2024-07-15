@@ -48,7 +48,7 @@
 
 		const margin = { top: 20, right: 40, bottom: 30, left: 40 };
 		const width = 644 - margin.left - margin.right;
-		const height = 100 - margin.top - margin.bottom;
+		const height = 150 - margin.top - margin.bottom;
 
 		const svg = d3
 			.select('#sentiment')

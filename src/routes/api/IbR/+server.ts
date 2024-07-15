@@ -27,3 +27,7 @@ export const GET = async ({ url }) => {
 
 	return new Response(JSON.stringify(JSON.parse(await trends)['default']['geoMapData']));
 };
+
+export const config = {
+	runtime: 'nodejs18.x'
+};
