@@ -104,15 +104,30 @@
 			trumpData = cachedData.trump;
 			bidenData = cachedData.biden;
 		} else {
-			trumpData = await fetch('/api/IbR?keyword=Trump' + query).then((d) => d.json());
-			bidenData = await fetch('/api/IbR?keyword=Biden' + query).then((d) => d.json());
+			let cache = true;
+			try {
+				trumpData = await fetch('/api/IbR?keyword=Trump' + query).then((d) => d.json());
+				bidenData = await fetch('/api/IbR?keyword=Biden' + query).then((d) => d.json());
 
-			localStorage.setItem(
-				value,
-				JSON.stringify({ trump: trumpData, biden: bidenData, timestamp: Date.now(), query })
-			);
+				if (trumpData.message == 'Internal Error' || bidenData.message == 'Internal Error') {
+					throw 'No Data';
+				}
+			} catch (e) {
+				cache = false;
+				alert('There was an error fetching the latest data, wait 20-30 seconds and reload.');
+				if (cachedData) {
+					trumpData = cachedData.trump;
+					bidenData = cachedData.biden;
+				}
+			}
+			if (cache) {
+				localStorage.setItem(
+					value,
+					JSON.stringify({ trump: trumpData, biden: bidenData, timestamp: Date.now(), query })
+				);
 
-			console.log('Reset cached data.');
+				console.log('Reset cached data.');
+			}
 		}
 
 		for (const state of states) {

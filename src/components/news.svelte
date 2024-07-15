@@ -26,16 +26,61 @@
 	};
 
 	async function fetchData() {
-		const response = await fetch('/api/news');
-		const result = await response.json();
+		let resp = await fetch('/trumpNews.json');
+		let trumpNews = await resp.json();
+		let resp_2 = await fetch('/bidenNews.json');
+		let bidenNews = await resp_2.json();
 
-		// Cache result
-		localStorage.setItem(
-			'newsData',
-			JSON.stringify({ data: result, timestamp: new Date().getTime() })
-		);
+		let news = {
+			trump: trumpNews,
+			biden: bidenNews
+		};
 
-		return result;
+		let tAvgSent = 0;
+
+		for (let i = 0; i < news.trump.news.length; i++) {
+			tAvgSent += news.trump.news[i].sentiment;
+		}
+
+		tAvgSent = tAvgSent / news.trump.news.length;
+
+		let bAvgSent = 0;
+
+		for (let i = 0; i < news.biden.news.length; i++) {
+			bAvgSent += news.biden.news[i].sentiment;
+		}
+
+		bAvgSent = bAvgSent / news.biden.news.length;
+
+		let returnVal = {
+			trump: {
+				averageSentiment: tAvgSent,
+				total: news.trump.avaliable,
+				latest: news.trump.news.slice(0, 10)
+			},
+			biden: {
+				averageSentiment: bAvgSent,
+				total: news.biden.avaliable,
+				latest: news.biden.news.slice(0, 10)
+			}
+		};
+
+		for (let i = 0; i < 10; i++) {
+			returnVal.trump.latest[i] = {
+				title: returnVal.trump.latest[i].title,
+				url: returnVal.trump.latest[i].url,
+				image: returnVal.trump.latest[i].image,
+				sentiment: returnVal.trump.latest[i].sentiment
+			};
+			returnVal.biden.latest[i] = {
+				title: returnVal.biden.latest[i].title,
+				url: returnVal.biden.latest[i].url,
+				image: returnVal.biden.latest[i].image,
+				sentiment: returnVal.biden.latest[i].sentiment
+			};
+		}
+
+		return returnVal;
 	}
 
 	function updateTrends() {
@@ -67,9 +112,7 @@
 			.padding(0.5);
 
 		const xAxis = (g) =>
-			g
-				.attr('transform', `translate(0,${height})`)
-				.call((g) => g.select('.domain').remove());
+			g.attr('transform', `translate(0,${height})`).call((g) => g.select('.domain').remove());
 
 		const yAxis = (g) =>
 			g.call(d3.axisLeft(y).tickSize(0)).call((g) => g.select('.domain').remove());
@@ -104,30 +147,29 @@
 			.attr('y2', height)
 			.attr('stroke', '#c9c9c9')
 			.attr('stroke-width', 1);
-        
-        // Add ticks to x-axis
-        svg
-            .append('g')
-            .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(x).tickValues([-1, -0.5, 0, 0.5, 1]))
+
+		// Add ticks to x-axis
+		svg
+			.append('g')
+			.attr('transform', `translate(0,${height})`)
+			.call(d3.axisBottom(x).tickValues([-1, -0.5, 0, 0.5, 1]));
 
 		svg.append('g').call(xAxis);
 
 		svg.append('g').call(yAxis);
 
 		for (const i of data.trump.latest) {
-			let li = document.createElement("li");
+			let li = document.createElement('li');
 			li.innerHTML = `<a href=${i.url}>${i.title}</a>`;
 
-			document.getElementById("trumpArticles").appendChild(li);
+			document.getElementById('trumpArticles').appendChild(li);
 		}
 
-		
 		for (const i of data.biden.latest) {
-			let li = document.createElement("li");
+			let li = document.createElement('li');
 			li.innerHTML = `<a href=${i.url}>${i.title}</a>`;
 
-			document.getElementById("bidenArticles").appendChild(li);
+			document.getElementById('bidenArticles').appendChild(li);
 		}
 	}
 
@@ -142,15 +184,15 @@
 		updateTrends();
 	});
 
-	let tDisplay = "none";
-	let bDisplay = "block";
+	let tDisplay = 'none';
+	let bDisplay = 'block';
 	function toggleNews() {
-		if (tDisplay == "none") {
-			tDisplay = "block";
-			bDisplay = "none";
+		if (tDisplay == 'none') {
+			tDisplay = 'block';
+			bDisplay = 'none';
 		} else {
-			tDisplay = "none";
-			bDisplay = "block";
+			tDisplay = 'none';
+			bDisplay = 'block';
 		}
 	}
 </script>
@@ -159,19 +201,28 @@
 	<h5>News Trends</h5>
 
 	<div id="sentiment">
-		<p>Average news sentiment from the past 7 days.<br>Ranges from -1 to 1; -1 is the most negative and 1 is the most positive.</p>
+		<p>
+			Average news sentiment from the past 7 days.<br />Ranges from -1 to 1; -1 is the most negative
+			and 1 is the most positive.
+		</p>
 	</div>
 </div>
 
 <div id="news">
-	<h5>Latest Articles Relating to {#if tDisplay == "none"} Biden {:else} Trump {/if}</h5>
+	<h5>
+		Latest Articles Relating to {#if tDisplay == 'none'}
+			Biden
+		{:else}
+			Trump
+		{/if}
+	</h5>
 	<div style="display: {tDisplay}">
-	<button on:click={toggleNews}>Show News on Biden</button>
-	<ul id="trumpArticles"></ul>
+		<button on:click={toggleNews}>Show News on Biden</button>
+		<ul id="trumpArticles"></ul>
 	</div>
 	<div style="display: {bDisplay}">
-	<button on:click={toggleNews}>Show News on Trump</button>
-	<ul id="bidenArticles"></ul>
+		<button on:click={toggleNews}>Show News on Trump</button>
+		<ul id="bidenArticles"></ul>
 	</div>
 </div>
 
@@ -183,7 +234,7 @@
 	ul {
 		text-align: left !important;
 	}
-	
+
 	button {
 		background-color: #ffffff;
 		color: #222222;

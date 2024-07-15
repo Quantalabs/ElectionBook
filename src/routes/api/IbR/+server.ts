@@ -22,7 +22,7 @@ export const GET = async ({ url }) => {
 			keyword: [keyword],
 			startTime: startTime,
 			endTime: endTime
-		})
+		});
 	}
 
 	return new Response(JSON.stringify(JSON.parse(await trends)['default']['geoMapData']));

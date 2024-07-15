@@ -12,8 +12,8 @@
 		value: number;
 	}[][] = [];
 	let candidates = ['Joe Biden', 'Donald Trump'];
-	let geo = 'US'; 
-	let time = 30; 
+	let geo = 'US';
+	let time = 30;
 
 	async function fetchData() {
 		const params = new URLSearchParams();
@@ -23,6 +23,7 @@
 
 		const response = await fetch(`/api/IoT?${params.toString()}`);
 		const result = await response.json();
+		console.log(result);
 		data = transformData(result);
 
 		// Cache the data with a timestamp
@@ -140,7 +141,9 @@
 				.attr('opacity', 0)
 				.attr('opacity', 1)
 				.on('mouseover', function (_, d) {
-					select('#tooltip').style('display', 'block').text(`Value: ${d.value}. \n Time: ${new Date(d.time).toDateString()}`);
+					select('#tooltip')
+						.style('display', 'block')
+						.text(`Value: ${d.value}. \n Time: ${new Date(d.time).toDateString()}`);
 				})
 				.on('mouseout', function () {
 					select('#tooltip').style('display', 'none');

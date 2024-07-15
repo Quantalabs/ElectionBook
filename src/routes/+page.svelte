@@ -55,18 +55,16 @@
 				<div class="item" id="IoT-holder">
 					<IoT />
 				</div>
+			{:else if show2020}
+				<button class="toggle-button" on:click={show2020Map}>Compare with Current Data</button>
+				<div class="item" id="IbR-holder">
+					<IbR start={new Date(Date.now() - 4 * 365 * 24 * 60 * 60 * 1000).getTime()} />
+				</div>
 			{:else}
-				{#if show2020}
-					<button class="toggle-button" on:click={show2020Map}>Compare with Current Data</button>
-					<div class="item" id="IbR-holder">
-						<IbR start={new Date(Date.now() - 4 * 365 * 24 * 60 * 60 * 1000).getTime()} />
-					</div>
-				{:else}
-					<button class="toggle-button" on:click={show2020Map}>Compare with 2020 Data</button>
-					<div class="item" id="IbR-holder">
-						<IbR />
-					</div>
-				{/if}
+				<button class="toggle-button" on:click={show2020Map}>Compare with 2020 Data</button>
+				<div class="item" id="IbR-holder">
+					<IbR />
+				</div>
 			{/if}
 		</div>
 
