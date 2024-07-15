@@ -114,6 +114,21 @@
 		svg.append('g').call(xAxis);
 
 		svg.append('g').call(yAxis);
+
+		for (const i of data.trump.latest) {
+			let li = document.createElement("li");
+			li.innerHTML = `<a href=${i.url}>${i.title}</a>`;
+
+			document.getElementById("trumpArticles").appendChild(li);
+		}
+
+		
+		for (const i of data.biden.latest) {
+			let li = document.createElement("li");
+			li.innerHTML = `<a href=${i.url}>${i.title}</a>`;
+
+			document.getElementById("bidenArticles").appendChild(li);
+		}
 	}
 
 	onMount(async () => {
@@ -126,18 +141,64 @@
 
 		updateTrends();
 	});
+
+	let tDisplay = "none";
+	let bDisplay = "block";
+	function toggleNews() {
+		if (tDisplay == "none") {
+			tDisplay = "block";
+			bDisplay = "none";
+		} else {
+			tDisplay = "none";
+			bDisplay = "block";
+		}
+	}
 </script>
 
 <div id="newsTrends">
 	<h5>News Trends</h5>
 
 	<div id="sentiment">
-		<p>Average news sentiment from the past 7 days</p>
+		<p>Average news sentiment from the past 7 days.<br>Ranges from -1 to 1; -1 is the most negative and 1 is the most positive.</p>
+	</div>
+</div>
+
+<div id="news">
+	<h5>Latest Articles Relating to {#if tDisplay == "none"} Biden {:else} Trump {/if}</h5>
+	<div style="display: {tDisplay}">
+	<button on:click={toggleNews}>Show News on Biden</button>
+	<ul id="trumpArticles"></ul>
+	</div>
+	<div style="display: {bDisplay}">
+	<button on:click={toggleNews}>Show News on Trump</button>
+	<ul id="bidenArticles"></ul>
 	</div>
 </div>
 
 <style>
 	* {
 		text-align: center;
+	}
+
+	ul {
+		text-align: left !important;
+	}
+	
+	button {
+		background-color: #ffffff;
+		color: #222222;
+		border: 1px solid #ffffff;
+		padding: 10px 20px;
+		font-size: 1.2rem;
+		cursor: pointer;
+		border-radius: 5px;
+		margin-top: 10px;
+		margin-bottom: 10px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	button:hover {
+		background-color: #c9c9c9;
+		border: 1px solid #c9c9c9;
 	}
 </style>
