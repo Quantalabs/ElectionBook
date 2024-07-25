@@ -11,7 +11,7 @@
 		time: Date;
 		value: number;
 	}[][] = [];
-	let candidates = ['Kamala Harris', 'Donald Trump', 'Kamala Harris', 'J. D. Vance'];
+	let candidates = ['Joe Biden', 'Donald Trump', 'Kamala Harris', 'J. D. Vance'];
 	let geo = 'US';
 	let time = 30;
 
