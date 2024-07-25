@@ -11,7 +11,7 @@
 		time: Date;
 		value: number;
 	}[][] = [];
-	let candidates = ['Joe Biden', 'Donald Trump'];
+	let candidates = ['Kamala Harris', 'Donald Trump', 'Kamala Harris', 'J. D. Vance'];
 	let geo = 'US';
 	let time = 30;
 
@@ -23,7 +23,6 @@
 
 		const response = await fetch(`/api/IoT?${params.toString()}`);
 		const result = await response.json();
-		console.log(result);
 		data = transformData(result);
 
 		// Cache the data with a timestamp
@@ -58,7 +57,7 @@
 
 	function checkCache() {
 		const cachedData = localStorage.getItem('iotData');
-		if (cachedData) {
+		if (cachedData != null) {
 			const { data, timestamp } = JSON.parse(cachedData);
 			const oneDay = 24 * 60 * 60 * 1000; // One day in milliseconds
 			const now = new Date().getTime();
@@ -106,12 +105,13 @@
 			.y((d) => y(d.value));
 
 		// Create lines and circles for tooltips with animation
-		candidates.forEach((_, index) => {
+		candidates.forEach((n, index) => {
+			if (!data[index]) return;
 			const path = svg
 				.append('path')
 				.datum(data[index])
 				.attr('fill', 'none')
-				.attr('stroke', index === 0 ? 'rgb(118, 118, 255)' : 'rgb(255, 118, 118)')
+				.attr('stroke', index % 2 == 0 ? 'rgb(118, 118, 255)' : 'rgb(255, 118, 118)')
 				.attr('stroke-width', 1.5)
 				.attr('d', lineGen);
 
@@ -141,12 +141,14 @@
 				.attr('opacity', 0)
 				.attr('opacity', 1)
 				.on('mouseover', function (_, d) {
+					select('.tooltip').style('display', 'block');
 					select('#tooltip')
 						.style('display', 'block')
-						.text(`Value: ${d.value}. \n Time: ${new Date(d.time).toDateString()}`);
+						.text(`Candidate: ${n}. \n Time: ${new Date(d.time).toDateString()}`);
 				})
 				.on('mouseout', function () {
 					select('#tooltip').style('display', 'none');
+					select('.tooltip').style('display', 'none');
 				});
 		});
 	}
@@ -173,6 +175,7 @@
 		position: relative;
 	}
 	.tooltip {
+		display: none;
 		position: absolute;
 		background-color: #333;
 		color: #fff;

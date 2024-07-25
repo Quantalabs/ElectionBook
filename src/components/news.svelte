@@ -13,7 +13,7 @@
 				sentiment: number;
 			}[];
 		};
-		biden: {
+		harris: {
 			averageSentiment: number;
 			total: number;
 			latest: {
@@ -28,12 +28,12 @@
 	async function fetchData() {
 		let resp = await fetch('/trumpNews.json');
 		let trumpNews = await resp.json();
-		let resp_2 = await fetch('/bidenNews.json');
-		let bidenNews = await resp_2.json();
+		let resp_2 = await fetch('/harrisNews.json');
+		let harrisNews = await resp_2.json();
 
 		let news = {
 			trump: trumpNews,
-			biden: bidenNews
+			harris: harrisNews
 		};
 
 		let tAvgSent = 0;
@@ -46,11 +46,11 @@
 
 		let bAvgSent = 0;
 
-		for (let i = 0; i < news.biden.news.length; i++) {
-			bAvgSent += news.biden.news[i].sentiment;
+		for (let i = 0; i < news.harris.news.length; i++) {
+			bAvgSent += news.harris.news[i].sentiment;
 		}
 
-		bAvgSent = bAvgSent / news.biden.news.length;
+		bAvgSent = bAvgSent / news.harris.news.length;
 
 		let returnVal = {
 			trump: {
@@ -58,10 +58,10 @@
 				total: news.trump.avaliable,
 				latest: news.trump.news.slice(0, 10)
 			},
-			biden: {
+			harris: {
 				averageSentiment: bAvgSent,
-				total: news.biden.avaliable,
-				latest: news.biden.news.slice(0, 10)
+				total: news.harris.avaliable,
+				latest: news.harris.news.slice(0, 10)
 			}
 		};
 
@@ -72,11 +72,11 @@
 				image: returnVal.trump.latest[i].image,
 				sentiment: returnVal.trump.latest[i].sentiment
 			};
-			returnVal.biden.latest[i] = {
-				title: returnVal.biden.latest[i].title,
-				url: returnVal.biden.latest[i].url,
-				image: returnVal.biden.latest[i].image,
-				sentiment: returnVal.biden.latest[i].sentiment
+			returnVal.harris.latest[i] = {
+				title: returnVal.harris.latest[i].title,
+				url: returnVal.harris.latest[i].url,
+				image: returnVal.harris.latest[i].image,
+				sentiment: returnVal.harris.latest[i].sentiment
 			};
 		}
 
@@ -84,11 +84,11 @@
 	}
 
 	function updateTrends() {
-		// Create a bar chart with two values: data.trump.averageSentiment, and data.biden.averageSentiment
+		// Create a bar chart with two values: data.trump.averageSentiment, and data.harris.averageSentiment
 		// Make sure that negative values are shown as well
 		const sentimentData = [
 			{ name: 'Trump', value: data.trump.averageSentiment, color: 'rgb(255, 118, 118)' },
-			{ name: 'Biden', value: data.biden.averageSentiment, color: 'rgb(118, 118, 255)' }
+			{ name: 'Harris', value: data.harris.averageSentiment, color: 'rgb(118, 118, 255)' }
 		];
 
 		const margin = { top: 20, right: 40, bottom: 30, left: 40 };
@@ -165,11 +165,11 @@
 			document.getElementById('trumpArticles').appendChild(li);
 		}
 
-		for (const i of data.biden.latest) {
+		for (const i of data.harris.latest) {
 			let li = document.createElement('li');
 			li.innerHTML = `<a href=${i.url}>${i.title}</a>`;
 
-			document.getElementById('bidenArticles').appendChild(li);
+			document.getElementById('harrisArticles').appendChild(li);
 		}
 	}
 
@@ -211,18 +211,18 @@
 <div id="news">
 	<h5>
 		Latest Articles Relating to {#if tDisplay == 'none'}
-			Biden
+			Harris
 		{:else}
 			Trump
 		{/if}
 	</h5>
 	<div style="display: {tDisplay}">
-		<button on:click={toggleNews}>Show News on Biden</button>
+		<button on:click={toggleNews}>Show News on Harris</button>
 		<ul id="trumpArticles"></ul>
 	</div>
 	<div style="display: {bDisplay}">
 		<button on:click={toggleNews}>Show News on Trump</button>
-		<ul id="bidenArticles"></ul>
+		<ul id="harrisArticles"></ul>
 	</div>
 </div>
 

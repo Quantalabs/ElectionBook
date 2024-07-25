@@ -1,3 +1,11 @@
+/* custom css rules */
+body {
+	padding-bottom: 0 !important;
+	padding-top: 0 !important;
+	margin-bottom: 0 !important;
+}
+
+
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 
 /* Document

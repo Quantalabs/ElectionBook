@@ -64,7 +64,7 @@
 		maxValueIndex: number;
 		hasData: [boolean];
 	}[];
-	let bidenData: {
+	let harrisData: {
 		geoCode: string;
 		geoName: string;
 		value: [number];
@@ -102,28 +102,27 @@
 		// Check if data is less than a day old
 		if (cachedData && Date.now() - Number(cachedData.timestamp) < 1000 * 60 * 60 * 24) {
 			trumpData = cachedData.trump;
-			bidenData = cachedData.biden;
+			harrisData = cachedData.harris;
 		} else {
 			let cache = true;
 			try {
 				trumpData = await fetch('/api/IbR?keyword=Trump' + query).then((d) => d.json());
-				bidenData = await fetch('/api/IbR?keyword=Biden' + query).then((d) => d.json());
+				harrisData = await fetch('/api/IbR?keyword=Harris' + query).then((d) => d.json());
 
-				if (trumpData.message == 'Internal Error' || bidenData.message == 'Internal Error') {
+				if (trumpData.message == 'Internal Error' || harrisData.message == 'Internal Error') {
 					throw 'No Data';
 				}
 			} catch (e) {
 				cache = false;
-				alert('There was an error fetching the latest data, wait 20-30 seconds and reload.');
 				if (cachedData) {
 					trumpData = cachedData.trump;
-					bidenData = cachedData.biden;
+					harrisData = cachedData.harris;
 				}
 			}
 			if (cache) {
 				localStorage.setItem(
 					value,
-					JSON.stringify({ trump: trumpData, biden: bidenData, timestamp: Date.now(), query })
+					JSON.stringify({ trump: trumpData, harris: harrisData, timestamp: Date.now(), query })
 				);
 
 				console.log('Reset cached data.');
@@ -141,7 +140,7 @@
 					values.push(Number(data.value));
 				}
 			}
-			for (let data of bidenData) {
+			for (let data of harrisData) {
 				if (data.geoName === name) {
 					values.push(Number(data.value));
 				}

@@ -19,6 +19,27 @@
 	onMount(() => {
 		checkOrientation();
 		window.addEventListener('resize', checkOrientation);
+
+		let colors = [
+			"#f38ba8",
+			"#7676ff",
+			"#eba0ac",
+			"#74c7ec",
+			"#fab387",
+			"#89dceb",
+			"#f9e2af",
+			"#94e2d5",
+		];
+
+		let highlight = document.getElementsByClassName("highlight");
+		for (var i = 0; i < highlight.length; i++) {
+			highlight[i].style.color = colors[i];
+		}
+
+		let highlightBg = document.getElementsByClassName("highlight_bg");
+		for (var i = 0; i < highlightBg.length; i++) {
+			highlightBg[i].style.backgroundColor = colors[(i+1)%colors.length];
+		}
 	});
 
 	function checkOrientation() {
@@ -34,14 +55,16 @@
 	<div class="landscape-message">Please view website in landscape</div>
 {:else}
 	<div>
+		<div id='page1'>
+		<div style="margin-left: auto; margin-right: auto;">
 		<h1><span id="election">Election</span><span id="book">Book</span></h1>
 		<p>Using the internet to look at political trends across the nation.</p>
 
-		<h5 style="text-align: center;">Trump vs. Biden</h5>
+		<h4 style="text-align: center;">Who Is More <span class="highlight">Popular?</span></h4>
 		<p style="text-align: center;">As per google search trends over the past 30 days</p>
 
 		<div class="button-container">
-			<button class="toggle-button" on:click={toggleComponent}>
+			<button class="toggle-button highlight_bg" on:click={toggleComponent}>
 				{#if showIoT}
 					Show Interest by Region
 				{:else}
@@ -56,19 +79,21 @@
 					<IoT />
 				</div>
 			{:else if show2020}
-				<button class="toggle-button" on:click={show2020Map}>Compare with Current Data</button>
 				<div class="item" id="IbR-holder">
 					<IbR start={new Date(Date.now() - 4 * 365 * 24 * 60 * 60 * 1000).getTime()} />
 				</div>
+				<button class="toggle-button" on:click={show2020Map}>Compare with Current Data</button>
 			{:else}
-				<button class="toggle-button" on:click={show2020Map}>Compare with 2020 Data</button>
 				<div class="item" id="IbR-holder">
 					<IbR />
 				</div>
+				<button class="toggle-button" on:click={show2020Map}>Compare with 2020 Data</button>
 			{/if}
+			</div>
 		</div>
-
-		<div class="container">
+		</div>
+		<div class="container" style="justify-content: center; height: 100vh; padding-bottom: 0;">
+			<h2>The <span class='highlight'>News</span></h2>
 			<div class="item" id="news-holder">
 				<News />
 			</div>
@@ -77,6 +102,11 @@
 {/if}
 
 <style>
+	#page1{
+		height: 100vh;
+		display: flex;
+		align-items: center;
+	}
 	h1 {
 		text-align: center;
 		margin-bottom: 10px;
@@ -109,7 +139,7 @@
 		padding: 20px;
 	}
 	.item {
-		width: 100%;
+		width: 200%;
 		max-width: 800px; /* Adjust the maximum width as needed */
 	}
 	@media (min-width: 768px) {
