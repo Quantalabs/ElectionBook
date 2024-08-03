@@ -115,6 +115,7 @@
 			} catch (e) {
 				cache = false;
 				if (cachedData) {
+					cache = true;
 					trumpData = cachedData.trump;
 					harrisData = cachedData.harris;
 				}

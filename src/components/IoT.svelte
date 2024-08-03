@@ -107,11 +107,19 @@
 		// Create lines and circles for tooltips with animation
 		candidates.forEach((n, index) => {
 			if (!data[index]) return;
+			console.log(data[index], index)
+
+			let color = '#000';
+      if (index === 0) color = '#76c1ff';
+      if (index === 1) color = '#ff7676';
+      if (index === 2) color = '#7676ff';
+      if (index === 3) color = '#ffc176';
+			
 			const path = svg
 				.append('path')
 				.datum(data[index])
 				.attr('fill', 'none')
-				.attr('stroke', index % 2 == 0 ? 'rgb(118, 118, 255)' : 'rgb(255, 118, 118)')
+				.attr('stroke', color)
 				.attr('stroke-width', 1.5)
 				.attr('d', lineGen);
 
@@ -137,7 +145,7 @@
 				.attr('r', 6)
 				.attr('cx', (d) => x(d.time))
 				.attr('cy', (d) => y(d.value))
-				.attr('fill', index === 0 ? 'rgb(118, 118, 255)' : 'rgb(255, 118, 118)')
+				.attr('fill', color)
 				.attr('opacity', 0)
 				.attr('opacity', 1)
 				.on('mouseover', function (_, d) {
