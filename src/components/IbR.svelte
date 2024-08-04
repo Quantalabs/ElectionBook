@@ -77,11 +77,9 @@
 	} = {};
 
 	let today = new Date();
-	export let start = new Date(today.setDate(today.getDate() - 30)).getTime();
-	let startTime = new Date(start);
-	let shouldBeStart = new Date(new Date().setDate(today.getDate() - 30));
+	export let time = "current";
+	let startTime = time == "current" ? new Date(new Date().setDate(today.getDate() - 30)) : new Date(new Date().setDate(today.getDate() - 30 - (365 * 4)));
 	startTime.setHours(0, 0, 0, 0);
-	shouldBeStart.setHours(0, 0, 0, 0);
 	let endTime = new Date(new Date(startTime).getTime() + 30 * 24 * 60 * 60 * 1000).getTime();
 
 	onMount(async () => {
@@ -94,7 +92,7 @@
 
 		states = topojson.feature(us, us.objects.states).features;
 
-		let value = startTime.getTime() == shouldBeStart.getTime() ? 'IbR' : 'IbR-2020';
+		let value = time == "current" ? 'IbR' : 'IbR-2020';
 
 		let cachedData = JSON.parse(localStorage.getItem(value) || '{}');
 		let query = '&geo=US&time=30&endTime=' + endTime;
@@ -106,8 +104,8 @@
 		} else {
 			let cache = true;
 			try {
-				trumpData = await fetch('/api/IbR?keyword=Trump' + query).then((d) => d.json());
-				harrisData = await fetch('/api/IbR?keyword=Harris' + query).then((d) => d.json());
+				trumpData = await fetch('/api/IbR?keyword=Donald%20Trump' + query).then((d) => d.json());
+				harrisData = time == "current" ? await fetch('/api/IbR?keyword=Kamala%20Harris' + query).then((d) => d.json()) : await fetch('/api/IbR?keyword=Joe%20Biden' + query).then((d) => d.json());
 
 				if (trumpData.message == 'Internal Error' || harrisData.message == 'Internal Error') {
 					throw 'No Data';

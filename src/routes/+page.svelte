@@ -80,7 +80,7 @@
 				</div>
 			{:else if show2020}
 				<div class="item" id="IbR-holder">
-					<IbR start={new Date(Date.now() - 4 * 365 * 24 * 60 * 60 * 1000).getTime()} />
+					<IbR time="2020"/>
 				</div>
 				<button class="toggle-button" on:click={show2020Map}>Compare with Current Data</button>
 			{:else}
