@@ -11,7 +11,7 @@
 		time: Date;
 		value: number;
 	}[][] = [];
-	let candidates = ['Joe Biden', 'Donald Trump', 'Kamala Harris', 'J. D. Vance'];
+	let candidates = ['Kamala Harris', 'Donald Trump', 'Tim Walz', 'J. D. Vance'];
 	let geo = 'US';
 	let time = 30;
 
@@ -110,9 +110,9 @@
 			console.log(data[index], index)
 
 			let color = '#000';
-      if (index === 0) color = '#76c1ff';
+      if (index === 0) color = '#7676ff';
       if (index === 1) color = '#ff7676';
-      if (index === 2) color = '#7676ff';
+      if (index === 2) color = '#76c1ff';
       if (index === 3) color = '#ffc176';
 			
 			const path = svg
