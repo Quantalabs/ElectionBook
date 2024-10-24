@@ -85,7 +85,7 @@
 			},
 		};
 
-		for (let i = 0; i < 7; i++) {
+		for (let i = 0; i < 10; i++) {
 			returnVal.trump.latest[i] = {
 				title: returnVal.trump.latest[i].title,
 				url: returnVal.trump.latest[i].url,
@@ -174,7 +174,7 @@
 
 		svg
 			.append('text')
-			.attr('x', x(-0.68))
+			.attr('x', x(-data.trump.negative / 50 + 0.02))
 			.attr('y', 36)
 			.text(data.trump.negative)
 			.style('font-size', '14px')
@@ -182,7 +182,7 @@
 		
 		svg
 			.append('text')
-			.attr('x', x(0.62))
+			.attr('x', x(data.trump.positive / 50 - 0.08))
 			.attr('y', 36)
 			.text(data.trump.positive)
 			.style('font-size', '14px')
@@ -190,15 +190,15 @@
 
 		svg
 			.append('text')
-			.attr('x', x(-0.68))
+			.attr('x', x(-data.harris.negative / 50 + 0.02))
 			.attr('y', 76)
-			.text(data.harris.positive)
+			.text(data.harris.negative)
 			.style('font-size', '14px')
 			.style('fill', 'white')
 					
 		svg
 			.append('text')
-			.attr('x', x(0.62))
+			.attr('x', x(data.harris.positive / 50 - 0.08))
 			.attr('y', 76)
 			.text(data.harris.positive)
 			.style('font-size', '14px')
