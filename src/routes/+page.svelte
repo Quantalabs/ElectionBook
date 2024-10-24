@@ -60,8 +60,8 @@
 		<h1><span id="election">Election</span><span id="book">Book</span></h1>
 		<p>Using the internet to look at political trends across the nation.</p>
 
-		<h4 style="text-align: center;">Who Is More <span class="highlight">Popular?</span></h4>
-		<p style="text-align: center;">As per google search trends over the past 30 days</p>
+		<h4 style="text-align: center;">Who Is More <span class="highlight">Searched</span> For?</h4>
+		<p style="text-align: center;">From google searches in the past 30 days nationwide</p>
 
 		<div class="button-container">
 			<button class="toggle-button highlight_bg" on:click={toggleComponent}>

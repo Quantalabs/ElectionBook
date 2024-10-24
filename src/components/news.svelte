@@ -37,17 +37,33 @@
 		};
 
 		let tAvgSent = 0;
+		let tPositive = 0;
+		let tNegative = 0;
 
 		for (let i = 0; i < news.trump.news.length; i++) {
 			tAvgSent += news.trump.news[i].sentiment;
+			if (news.trump.news[i].sentiment > 0) {
+				tPositive += 1;
+			}
+			else {
+				tNegative += 1;
+			}		
 		}
 
 		tAvgSent = tAvgSent / news.trump.news.length;
 
 		let bAvgSent = 0;
+		let bPositive = 0;
+		let bNegative = 0;
 
 		for (let i = 0; i < news.harris.news.length; i++) {
 			bAvgSent += news.harris.news[i].sentiment;
+			if (news.harris.news[i].sentiment > 0) {
+				bPositive += 1;
+			}
+			else {
+				bNegative += 1;
+			}
 		}
 
 		bAvgSent = bAvgSent / news.harris.news.length;
@@ -56,16 +72,20 @@
 			trump: {
 				averageSentiment: tAvgSent,
 				total: news.trump.avaliable,
+				positive: tPositive,
+				negative: tNegative,
 				latest: news.trump.news.slice(0, 10)
 			},
 			harris: {
 				averageSentiment: bAvgSent,
 				total: news.harris.avaliable,
+				positive: bPositive,
+				negative: bNegative,
 				latest: news.harris.news.slice(0, 10)
-			}
+			},
 		};
 
-		for (let i = 0; i < 10; i++) {
+		for (let i = 0; i < 7; i++) {
 			returnVal.trump.latest[i] = {
 				title: returnVal.trump.latest[i].title,
 				url: returnVal.trump.latest[i].url,
@@ -88,7 +108,11 @@
 		// Make sure that negative values are shown as well
 		const sentimentData = [
 			{ name: 'Trump', value: data.trump.averageSentiment, color: 'rgb(255, 118, 118)' },
-			{ name: 'Harris', value: data.harris.averageSentiment, color: 'rgb(118, 118, 255)' }
+			{ name: 'Harris', value: data.harris.averageSentiment, color: 'rgb(118, 118, 255)' },
+			{ name: "Trump", value:  -data.trump.negative / 50, color: 'rgba(255, 118, 118, 0.5)' },
+			{ name: "Trump", value: data.trump.positive / 50, color: 'rgba(255, 118, 118, 0.5)' },
+			{ name: "Harris", value: -data.harris.negative / 50, color: 'rgba(118, 118, 255, 0.5)'},
+			{ name: "Harris", value: data.harris.positive / 50, color: 'rgba(118, 118, 255,0.5)'}
 		];
 
 		const margin = { top: 20, right: 40, bottom: 30, left: 40 };
@@ -148,6 +172,37 @@
 			.attr('stroke', '#c9c9c9')
 			.attr('stroke-width', 1);
 
+		svg
+			.append('text')
+			.attr('x', x(-0.68))
+			.attr('y', 36)
+			.text(data.trump.negative)
+			.style('font-size', '14px')
+			.style('fill', 'white')
+		
+		svg
+			.append('text')
+			.attr('x', x(0.62))
+			.attr('y', 36)
+			.text(data.trump.positive)
+			.style('font-size', '14px')
+			.style('fill', 'white')
+
+		svg
+			.append('text')
+			.attr('x', x(-0.68))
+			.attr('y', 76)
+			.text(data.harris.positive)
+			.style('font-size', '14px')
+			.style('fill', 'white')
+					
+		svg
+			.append('text')
+			.attr('x', x(0.62))
+			.attr('y', 76)
+			.text(data.harris.positive)
+			.style('font-size', '14px')
+			.style('fill', 'white')
 		// Add ticks to x-axis
 		svg
 			.append('g')
@@ -198,12 +253,9 @@
 </script>
 
 <div id="newsTrends">
-	<h5>News Trends</h5>
-
 	<div id="sentiment">
 		<p>
-			Average news sentiment from the past 7 days.<br />Ranges from -1 to 1; -1 is the most negative
-			and 1 is the most positive.
+			Highlighted is the average sentiment of news. Count shown on extremes. <br> -1 is the most negative and 1 is the most positive.
 		</p>
 	</div>
 </div>

@@ -4,9 +4,10 @@
 	import { scaleTime, scaleLinear } from 'd3-scale';
 	import { extent, max } from 'd3-array';
 	import { axisBottom, axisLeft } from 'd3-axis';
-	import { select } from 'd3-selection';
+	import { select, selectAll } from 'd3-selection';
 	import 'd3-transition';
-
+	import { timeFormat } from 'd3-time-format';
+	
 	let data: {
 		time: Date;
 		value: number;
@@ -96,9 +97,23 @@
 			.nice()
 			.range([height, 0]);
 
-		svg.append('g').attr('transform', `translate(0,${height})`).call(axisBottom(x));
+		svg
+			.append('g')
+			.attr('transform', `translate(17.5, ${height})`)
+			.attr('class', 'xAxis')
+			.call(
+				axisBottom(x)
+					.tickFormat(timeFormat('%b %d'))
+			)
+			.selectAll("path,line")
+			.style("opacity", 0)
 
 		svg.append('g').call(axisLeft(y));
+
+		selectAll(".tick>text")
+			.each(function(d,i) {
+				select(this).style("font-size", "12px")
+			})
 
 		const lineGen = line<{ time: Date; value: number }>()
 			.x((d) => x(d.time))
