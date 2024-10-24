@@ -7,7 +7,7 @@
 	import { select, selectAll } from 'd3-selection';
 	import 'd3-transition';
 	import { timeFormat } from 'd3-time-format';
-	
+
 	let data: {
 		time: Date;
 		value: number;
@@ -101,35 +101,68 @@
 			.append('g')
 			.attr('transform', `translate(17.5, ${height})`)
 			.attr('class', 'xAxis')
-			.call(
-				axisBottom(x)
-					.tickFormat(timeFormat('%b %d'))
-			)
-			.selectAll("path,line")
-			.style("opacity", 0)
+			.call(axisBottom(x).tickFormat(timeFormat('%b %d')))
+			.selectAll('path,line')
+			.style('opacity', 0);
 
 		svg.append('g').call(axisLeft(y));
 
-		selectAll(".tick>text")
-			.each(function(d,i) {
-				select(this).style("font-size", "12px")
-			})
+		selectAll('.tick>text').each(function (d, i) {
+			select(this).style('font-size', '12px');
+		});
 
 		const lineGen = line<{ time: Date; value: number }>()
 			.x((d) => x(d.time))
 			.y((d) => y(d.value));
 
+		svg.append('circle').attr('cx', 20).attr('cy', 0).attr('r', 6).style('fill', '#7676ff');
+		svg.append('circle').attr('cx', 20).attr('cy', 30).attr('r', 6).style('fill', '#ff7676');
+		svg.append('circle').attr('cx', 20).attr('cy', 60).attr('r', 6).style('fill', '#76c1ff');
+		svg.append('circle').attr('cx', 20).attr('cy', 90).attr('r', 6).style('fill', '#ffc176');
+		svg
+			.append('text')
+			.attr('x', 35)
+			.attr('y', 3)
+			.text('Kamala Harris')
+			.style('font-size', '15px')
+			.style('fill', 'white')
+			.attr('alignment-baseline', 'middle');
+		svg
+			.append('text')
+			.attr('x', 35)
+			.attr('y', 33)
+			.text('Donald Trump')
+			.style('font-size', '15px')
+			.style('fill', 'white')
+			.attr('alignment-baseline', 'middle');
+		svg
+			.append('text')
+			.attr('x', 35)
+			.attr('y', 63)
+			.text('Tim Walz')
+			.style('font-size', '15px')
+			.style('fill', 'white')
+			.attr('alignment-baseline', 'middle');
+		svg
+			.append('text')
+			.attr('x', 35)
+			.attr('y', 93)
+			.text('J.D. Vance')
+			.style('font-size', '15px')
+			.style('fill', 'white')
+			.attr('alignment-baseline', 'middle');
+
 		// Create lines and circles for tooltips with animation
 		candidates.forEach((n, index) => {
 			if (!data[index]) return;
-			console.log(data[index], index)
+			console.log(data[index], index);
 
 			let color = '#000';
-      if (index === 0) color = '#7676ff';
-      if (index === 1) color = '#ff7676';
-      if (index === 2) color = '#76c1ff';
-      if (index === 3) color = '#ffc176';
-			
+			if (index === 0) color = '#7676ff';
+			if (index === 1) color = '#ff7676';
+			if (index === 2) color = '#76c1ff';
+			if (index === 3) color = '#ffc176';
+
 			const path = svg
 				.append('path')
 				.datum(data[index])
