@@ -107,17 +107,17 @@
 		// Create a bar chart with two values: data.trump.averageSentiment, and data.harris.averageSentiment
 		// Make sure that negative values are shown as well
 		const sentimentData = [
-			{ name: 'Trump', value: data.trump.averageSentiment, color: 'rgb(255, 118, 118)' },
-			{ name: 'Harris', value: data.harris.averageSentiment, color: 'rgb(118, 118, 255)' },
-			{ name: "Trump", value:  -data.trump.negative / 50, color: 'rgba(255, 118, 118, 0.5)' },
-			{ name: "Trump", value: data.trump.positive / 50, color: 'rgba(255, 118, 118, 0.5)' },
-			{ name: "Harris", value: -data.harris.negative / 50, color: 'rgba(118, 118, 255, 0.5)'},
-			{ name: "Harris", value: data.harris.positive / 50, color: 'rgba(118, 118, 255,0.5)'}
+			{ name: 'Trump (Avg)', value: data.trump.averageSentiment, color: 'rgb(255, 118, 118)' },
+			{ name: 'Harris (Avg)', value: data.harris.averageSentiment, color: 'rgb(118, 118, 255)' },
+			{ name: "Trump (Total)", value:  -data.trump.negative / 50, color: 'rgba(255, 118, 118, 0.5)' },
+			{ name: "Trump (Total)", value: data.trump.positive / 50, color: 'rgba(255, 118, 118, 0.5)' },
+			{ name: "Harris (Total)", value: -data.harris.negative / 50, color: 'rgba(118, 118, 255, 0.5)'},
+			{ name: "Harris (Total)", value: data.harris.positive / 50, color: 'rgba(118, 118, 255,0.5)'}
 		];
 
-		const margin = { top: 20, right: 40, bottom: 30, left: 40 };
-		const width = 644 - margin.left - margin.right;
-		const height = 150 - margin.top - margin.bottom;
+		const margin = { top: 20, right: 15, bottom: 30, left: 87 };
+		const width = 544 - margin.left - margin.right;
+		const height = 350 - margin.top - margin.bottom;
 
 		const svg = d3
 			.select('#sentiment')
@@ -134,6 +134,11 @@
 			.domain(sentimentData.map((d) => d.name))
 			.range([0, height])
 			.padding(0.5);
+		
+		const x2  = d3
+			.scaleLinear()
+			.domain([-50, 50])
+			.range([0, width]);
 
 		const xAxis = (g) =>
 			g.attr('transform', `translate(0,${height})`).call((g) => g.select('.domain').remove());
@@ -175,7 +180,7 @@
 		svg
 			.append('text')
 			.attr('x', x(-data.trump.negative / 50 + 0.02))
-			.attr('y', 36)
+			.attr('y', 190)
 			.text(data.trump.negative)
 			.style('font-size', '14px')
 			.style('fill', 'white')
@@ -183,7 +188,7 @@
 		svg
 			.append('text')
 			.attr('x', x(data.trump.positive / 50 - 0.08))
-			.attr('y', 36)
+			.attr('y', 190)
 			.text(data.trump.positive)
 			.style('font-size', '14px')
 			.style('fill', 'white')
@@ -191,7 +196,7 @@
 		svg
 			.append('text')
 			.attr('x', x(-data.harris.negative / 50 + 0.02))
-			.attr('y', 76)
+			.attr('y', 256)
 			.text(data.harris.negative)
 			.style('font-size', '14px')
 			.style('fill', 'white')
@@ -199,19 +204,22 @@
 		svg
 			.append('text')
 			.attr('x', x(data.harris.positive / 50 - 0.08))
-			.attr('y', 76)
+			.attr('y', 256)
 			.text(data.harris.positive)
 			.style('font-size', '14px')
 			.style('fill', 'white')
 		// Add ticks to x-axis
 		svg
 			.append('g')
+			.attr('id', 'xTicks')
 			.attr('transform', `translate(0,${height})`)
 			.call(d3.axisBottom(x).tickValues([-1, -0.5, 0, 0.5, 1]));
 
 		svg.append('g').call(xAxis);
 
 		svg.append('g').call(yAxis);
+
+		d3.selectAll('svg > g > g').style('font-size', '14px')
 
 		for (const i of data.trump.latest) {
 			let li = document.createElement('li');
@@ -255,7 +263,7 @@
 <div id="newsTrends">
 	<div id="sentiment">
 		<p>
-			Highlighted is the average sentiment of news. Count shown on extremes. <br> -1 is the most negative and 1 is the most positive.
+			-1 is the most negative, 1 is the most positive.
 		</p>
 	</div>
 </div>

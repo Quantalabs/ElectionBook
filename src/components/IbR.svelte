@@ -7,16 +7,16 @@
 	import Bar from './bar.svelte';
 
 	function generateColor(redScore: number, blueScore: number) {
-		if (redScore > blueScore && redScore - blueScore > 10) {
-			return 'rgb(255, 118, 118)';
-		} else if (blueScore > redScore && blueScore - redScore > 10) {
-			return 'rgb(118, 118, 255)';
+		if (redScore > blueScore && redScore - blueScore > 25) {
+			return 'rgb(255, 0, 0)';
+		} else if (blueScore > redScore && blueScore - redScore > 25) {
+			return 'rgb(0, 0, 255)';
 		} else if (redScore > blueScore) {
-			return 'rgb(198, 118, 175)';
+			return 'rgb(255, 118, 118)';
 		} else if (blueScore > redScore) {
-			return 'rgb(130, 118, 244)';
+			return 'rgb(118, 118, 255)';
 		} else {
-			return 'rgb(70, 35, 209)';
+			return 'rgb(95, 0, 160)';
 		}
 	}
 
@@ -167,7 +167,7 @@
 	});
 </script>
 
-<svg viewBox="0 0 975 610" id="IbR">
+<svg viewBox="0 0 975 610" id="IbR" style="width: 120%; margin-left: -10%;">
 	<!-- State shapes -->
 	<g fill="white" stroke="black">
 		{#each states as feature, i}

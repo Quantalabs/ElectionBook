@@ -194,51 +194,20 @@
 				.attr('cx', (d) => x(d.time))
 				.attr('cy', (d) => y(d.value))
 				.attr('fill', color)
-				.attr('opacity', 0)
 				.attr('opacity', 1)
-				.on('mouseover', function (_, d) {
-					select('.tooltip').style('display', 'block');
-					select('#tooltip')
-						.style('display', 'block')
-						.text(`Candidate: ${n}. \n Time: ${new Date(d.time).toDateString()}`);
-				})
-				.on('mouseout', function () {
-					select('#tooltip').style('display', 'none');
-					select('.tooltip').style('display', 'none');
-				});
 		});
 	}
 </script>
 
 <div class="svg-container">
 	<svg id="IoT" viewBox="0 0 975 610"></svg>
-	<div id="flex-contianer">
-		<div class="tooltip">
-			<div id="tooltip" style="display: none;"></div>
-		</div>
-	</div>
 </div>
 
 <style>
-	#flex-contianer {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		width: 100%;
-	}
 	.svg-container {
 		text-align: center;
 		position: relative;
-	}
-	.tooltip {
-		display: none;
-		position: absolute;
-		background-color: #333;
-		color: #fff;
-		padding: 5px;
-		border-radius: 5px;
-		font-size: 12px;
-		pointer-events: none;
-		margin-top: 20px;
+		width: 120%;
+		margin-left: -10%;
 	}
 </style>

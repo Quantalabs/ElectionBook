@@ -55,7 +55,7 @@
 	<div class="landscape-message">Please view website in landscape</div>
 {:else}
 	<div>
-		<div id='page1'>
+		<div id='page1' style="margin-bottom: 10vh;">
 		<div style="margin-left: auto; margin-right: auto;">
 		<h1><span id="election">Election</span><span id="book">Book</span></h1>
 		<p>Using the internet to look at political trends across the nation.</p>
@@ -79,17 +79,33 @@
 					<IoT />
 				</div>
 			{:else if show2020}
+				<p style="text-align: center;width:100%;">2020 Data</p>
 				<div class="item" id="IbR-holder">
 					<IbR time="2020"/>
 				</div>
 				<button class="toggle-button" on:click={show2020Map}>Compare with Current Data</button>
 			{:else}
+				<p style="text-align: center;width:100%;">2024 Data</p>
 				<div class="item" id="IbR-holder">
 					<IbR />
 				</div>
 				<button class="toggle-button" on:click={show2020Map}>Compare with 2020 Data</button>
 			{/if}
 			</div>
+		</div>
+		<div class="smallCont">
+			{#if showIoT}
+			{:else if show2020}
+				<p style="text-align: center;width:100%;">2024 Data</p>
+				<div class="item" id="IbR-holder">
+					<IbR />
+				</div>
+			{:else}
+				<p style="text-align: center;width:100%;">2020 Data</p>
+				<div class="item" id="IbR-holder">
+					<IbR time="2020"/>
+				</div>
+			{/if}
 		</div>
 		</div>
 		<div class="container" style="justify-content: center; height: 100vh; padding-bottom: 0;">
@@ -102,6 +118,12 @@
 {/if}
 
 <style>
+	.smallCont {
+		position: absolute;
+		width: 7%;
+		top: 30vh;
+		left: 8vw;
+	}
 	#page1{
 		height: 100vh;
 		display: flex;
